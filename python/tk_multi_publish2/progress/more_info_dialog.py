@@ -42,6 +42,7 @@ class MoreInfoDialog(QtGui.QDialog):
 
         # set the label and editor text
         self.ui.message_label.setText(message)
+        self.ui.message_label.setWordWrap(True)
         self.ui.text_edit.setText(str(text))
 
         self.setWindowTitle("Additional log info...")
