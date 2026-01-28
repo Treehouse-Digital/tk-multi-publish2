@@ -13,7 +13,10 @@
 #
 [run]
 source=.
-omit=tests/*
+omit=
+    tests/*
+    *shiboken*
+    signature_bootstrap.py
 
 [report]
 exclude_lines =
