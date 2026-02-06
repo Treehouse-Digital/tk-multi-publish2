@@ -15,3 +15,36 @@ The app itself has a few plugins that pretend to operate on items found in a
 scene.
 
 Install tk-toolchain and use pytest to run the tests
+
+For example (on \*nix), you have only just `git clone` down this repository
+and currently cd'd into its root folder:
+
+1. Setup the virtual environment with the Python requirements:
+
+   ```bash
+   python -m venv .venv
+   .venv/bin/pip install PySide6 git+https://github.com/shotgunsoftware/tk-toolchain.git#egg=tk-toolchain
+   ```
+
+2. Clone down the required `tk-*` repos adjacent to the current repository.
+
+   > ⚠️ Only run these if you don't have those repos already cloned down.
+
+   ```bash
+   git clone git+github.com/shotgunsoftware/tk-core.git ../tk-core
+   git clone git+github.com/shotgunsoftware/tk-shell.git ../tk-shell
+   git clone git+github.com/shotgunsoftware/tk-frameworks-qtwidgets.git ../tk-frameworks-qtwidgets
+   git clone git+github.com/shotgunsoftware/tk-frameworks-shotgunutils.git ../tk-frameworks-shotgunutils
+   ```
+3. Run pytest and output coverage to HTML to execute the tests:
+
+   ```bash
+   .venv/bin/coverage run -m pytest
+   .venv/bin/coverage html
+   ```
+
+3. Run pre-commit to check the code quality:
+
+   ```bash
+   .venv/bin/pre-commit run --all
+   ```
