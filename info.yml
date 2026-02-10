@@ -15,6 +15,17 @@ configuration:
         description: Specify the name that should be used in menus and the main
                      publish dialog
 
+    display:
+        type: dict
+        description: Hook and settings that defines how the command/action to
+                     show the publish dialog is displayed
+        items:
+            hook: {type: hook}
+            settings: {type: dict, allows_empty: True}
+        default_value:
+            hook: "{self}/display_hook.py"
+            settings: {}
+
     display_action_name:
         type: str
         default_value: Publish
@@ -29,6 +40,42 @@ configuration:
         type: dict
         description: "Collector-specific configuration settings."
         default_value: {}
+
+    summary:
+        type: dict
+        description: Hook and settings that defines how the summary overlay is displayed
+        items:
+            hook: {type: hook}
+            settings: {type: dict, allows_empty: True}
+        default_value:
+            hook: "{self}/summary_hook.py"
+            settings:
+                no_item_error:
+                    icon_path: ":/tk_multi_publish2/publish_failed.png"
+                    label_text: |
+                        Could not find any
+                        items to publish.
+                    info_text: "For more details, <b><u>click here</u></b>."
+                    publish_again_text: ""
+                success:
+                    icon_path: ":/tk_multi_publish2/publish_complete.png"
+                    label_text: |
+                        Publish
+                        Complete
+                    info_text: "For more details, <b><u>click here</u></b>."
+                    publish_again_text: "To publish again, <b><u>click here</u></b>."
+                fail:
+                    icon_path: ":/tk_multi_publish2/publish_failed.png"
+                    label_text: |
+                        Publish
+                        Failed!
+                    info_text: "For more details, <b><u>click here</u></b>."
+                    publish_again_text: ""
+                loading:
+                    icon_path: ":/tk_multi_publish2/overlay_loading.png"
+                    label_text: "Loading and processing"
+                    info_text: "Hold tight while we analyze your data"
+                    publish_again_text: ""
 
     post_phase:
         type: hook
@@ -47,6 +94,14 @@ configuration:
            information from file paths. This includes version and frame number
            identification, publish display name, image sequence paths, etc."
         default_value: "{self}/path_info.py"
+
+    tree_node_clicked:
+        type: hook
+        default_value: "{self}/tree_node_clicked.py"
+        description:
+          "Actions to take for clicking on a tree node (an instance of subclass
+          of TreeNodeBase). The methods 'single' and 'double' are called
+          respectively for single and double clicks."
 
     thumbnail_generator:
         type: hook
@@ -131,6 +186,19 @@ configuration:
         description:
           "If true the app dialog will be opened in modal window mode, else if
            false (default) the dialog will be opened in non-modal window mode."
+
+    fit_width_to_items:
+        type: str
+        default_value: "never"
+        description: |
+            Determines when the publish dialog should automatically resize its width
+            to fit the contents of the items tree. Valid values are:
+
+            - 'never'   (default) The dialog will never auto resize its width
+            - 'initial' The dialog will auto resize its width once,
+                        when the items tree is first populated
+            - 'always'  The dialog will auto resize its width every time the items
+                        tree is modified (items added/removed)
 
 
 # the Shotgun fields that this app needs in order to operate correctly
