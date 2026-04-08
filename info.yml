@@ -17,8 +17,9 @@ configuration:
 
     display:
         type: dict
-        description: Hook and settings that defines how the command/action to
-                     show the publish dialog is displayed
+        description: Hook and settings that implements the values of various GUI
+                     elements of the publish dialog such as window title, menu name
+                     that launches the dialog, button label, etc.
         items:
             hook: {type: hook}
             settings: {type: dict, allows_empty: True}
