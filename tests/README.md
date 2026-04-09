@@ -26,16 +26,35 @@ and currently cd'd into its root folder:
    .venv/bin/pip install PySide6 git+https://github.com/shotgunsoftware/tk-toolchain.git#egg=tk-toolchain
    ```
 
+   Or via uv:
+
+   ```bash
+   uv venv --python=3.11
+   uv pip install PySide6 git+https://github.com/shotgunsoftware/tk-toolchain.git#egg=tk-toolchain
+   ```
+
 2. Clone down the required `tk-*` repos adjacent to the current repository.
 
    > ⚠️ Only run these if you don't have those repos already cloned down.
 
    ```bash
-   git clone git+github.com/shotgunsoftware/tk-core.git ../tk-core
-   git clone git+github.com/shotgunsoftware/tk-shell.git ../tk-shell
-   git clone git+github.com/shotgunsoftware/tk-frameworks-qtwidgets.git ../tk-frameworks-qtwidgets
-   git clone git+github.com/shotgunsoftware/tk-frameworks-shotgunutils.git ../tk-frameworks-shotgunutils
+   git clone git@github.com:shotgunsoftware/tk-core.git ../tk-core
+   git clone git@github.com:shotgunsoftware/tk-shell.git ../tk-shell
+   git clone git@github.com:shotgunsoftware/tk-frameworks-qtwidgets.git ../tk-frameworks-qtwidgets
+   git clone git@github.com:shotgunsoftware/tk-frameworks-shotgunutils.git ../tk-frameworks-shotgunutils
    ```
+
+   Alternatively these can also be cloned under `.venv/SHOTGUN_REPOS_ROOT` to keep everything
+   contained inside `.venv` and setup the `SHOTGUN_REPOS_ROOT` env var to use it.
+
+   ```bash
+   mkdir -p .venv/SHOTGUN_REPOS_ROOT
+   for TK_NAME in core shell framework-{qtwidgets,shotgunutils}
+   do git -C .venv/SHOTGUN_REPOS_ROOT clone git@github.com:shotgunsoftware/tk-"$TK_NAME".git
+   done
+   export SHOTGUN_REPOS_ROOT="$(readlink -e .venv/SHOTGUN_REPOS_ROOT)"
+   ```
+
 3. Run pytest and output coverage to HTML to execute the tests:
 
    ```bash
