@@ -27,7 +27,10 @@
 
 """
 
-from typing import TypeVar, Union
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, TypeVar
+
 import sgtk
 from sgtk.platform.qt import QtCore, QtGui
 
@@ -35,30 +38,42 @@ HookBaseClass = sgtk.get_hook_baseclass()
 
 TreeNode = TypeVar("TreeNode", bound=QtGui.QTreeWidgetItem)
 CustomTreeWidget = TypeVar("CustomTreeWidget", bound=QtGui.QFrame)
-API = Union[TypeVar("PublishItem"), TypeVar("PublishTask"), None]
+PublishItem = TypeVar("PublishItem", bound="tk_multi_publish2.api.PublishItem")
+PublishTask = TypeVar("PublishTask", bound="tk_multi_publish2.api.PublishTask")
+if TYPE_CHECKING and (publish2_app := sgtk.platform.current_bundle()):
+    tk_multi_publish2 = publish2_app.import_module("tk_multi_publish2")
 
 
 class TreeNodeClicked(HookBaseClass):
+    """Hook called when a publish tree node is clicked (QTreeWidgetItem)."""
 
     def single(
         self,
         node: TreeNode,
         widget: CustomTreeWidget,
-        api: API,
+        api: PublishItem | PublishTask | None,
         buttons: QtCore.Qt.MouseButtons,
         modifiers: QtCore.Qt.KeyboardModifiers,
-    ):  # type: (...) -> None
-        """Single click callback on a `.TreeNodeBase` (a `.QtGui.QTreeWidgetItem`)."""
+    ) -> None:
+        """Single click callback on a `.TreeNodeBase` (a `.QtGui.QTreeWidgetItem`).
+
+        By default, nothing additional is implemented and it's just Qt's built-in
+        behavior.
+        """
 
     def double(
         self,
         node: TreeNode,
         widget: CustomTreeWidget,
-        api: API,
+        api: PublishItem | PublishTask | None,
         buttons: QtCore.Qt.MouseButtons,
         modifiers: QtCore.Qt.KeyboardModifiers,
-    ):  # type: (...) -> None
-        """Double click callback on a `.TreeNodeBase` (a `.QtGui.QTreeWidgetItem`)."""
+    ) -> None:
+        """Double click callback on a `.TreeNodeBase` (a `.QTreeWidgetItem`).
+
+        Default implementation ensures expansion state is correctly set whenever
+        left/main mouse button is clicked (behavior from v2.10.8)
+        """
         if buttons == QtCore.Qt.LeftButton:
             # Ensure expansion states are correctly updated
             node.setExpanded(node.isExpanded())

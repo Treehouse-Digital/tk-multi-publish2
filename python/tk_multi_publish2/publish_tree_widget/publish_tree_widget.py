@@ -62,7 +62,7 @@ class PublishTreeWidget(QtGui.QTreeWidget):
         self.addTopLevelItem(self._summary_node)
         self._summary_node.setHidden(True)
 
-        # forward double clicks on items to the items themselves
+        # forward clicks on items to the items themselves
         self.itemDoubleClicked.connect(self._click_slot_factory("double"))
         self.itemClicked.connect(self._click_slot_factory("single"))
 
